@@ -1,4 +1,4 @@
-# course-api
+# Language Courses API
 RESTful API made in Spring Boot.
 This API executes Post, Put, Get and Delete operations on a Mongo database.
 Objects are Students, Teachers, Courses and Classes. A Course is represented by a language, and may contain various Classes. Each Class
