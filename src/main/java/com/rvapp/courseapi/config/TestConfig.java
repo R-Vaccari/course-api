@@ -31,6 +31,11 @@ public class TestConfig implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
+		studentRepository.deleteAll();
+		teacherRepository.deleteAll();
+		classRepository.deleteAll();
+		courseRepository.deleteAll();
+		
 		Teacher teacher01 = new Teacher(null, "Teacher", "01", null, "teacher01@gmail.com", "+999999");
 		Teacher teacher02 = new Teacher(null, "Teacher", "02", null, "teacher02@gmail.com", "+999999");
 
