@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.rvapp.courseapi.domain.Course;
 import com.rvapp.courseapi.domain.enums.CourseType;
+import com.rvapp.courseapi.exceptions.DuplicateObjectException;
 import com.rvapp.courseapi.exceptions.ObjectNotFoundException;
 import com.rvapp.courseapi.repositories.CourseRepository;
 
@@ -24,23 +26,31 @@ public class CourseService {
 	
 	public Course findById(String id) {
 		Optional<Course> course = repository.findById(id);
-		return course.orElseThrow(() -> new ObjectNotFoundException("Requested id not found."));
+		return course.orElseThrow(() -> new ObjectNotFoundException(id));
 	}
 	
 	public List<Course> findByType(String text) {
 		try { 
 			return repository.findByCourseType(CourseType.valueOf(text));
-		} catch (EnumConstantNotPresentException e) {
-			throw new ObjectNotFoundException(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw new ObjectNotFoundException(text);
 		}
 	}
 	
 	public void deleteById(String id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ObjectNotFoundException(id);
+		}
 	}
 	
 	public void post(Course course) {
-		repository.insert(course);
+		try {
+			repository.insert(course);
+		} catch (RuntimeException e) {  // accuses MongoWriteException but won't catch it
+			throw new DuplicateObjectException(course.getId());
+		}
 	}
 	
 	public void update(Course source, Course target) {

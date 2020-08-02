@@ -1,6 +1,7 @@
 package com.rvapp.courseapi.resources.exceptions;
 
-import java.time.Instant;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,13 +15,16 @@ import com.rvapp.courseapi.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
 
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<StandartError> resourceNotFound(ObjectNotFoundException e,
 			HttpServletRequest request) {
 		String error = "Resource not found.";
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		StandartError se = new StandartError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		StandartError se = new StandartError(sdf.format(new Date()), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(se);
 	}
 	
@@ -29,7 +33,7 @@ public class ResourceExceptionHandler {
 			HttpServletRequest request) {
 		String error = "Object already exists. Change id for posting or use PUT.";
 		HttpStatus status = HttpStatus.CONFLICT;
-		StandartError se = new StandartError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		StandartError se = new StandartError(sdf.format(new Date()), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(se);
 	}
 	

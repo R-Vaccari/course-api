@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.rvapp.courseapi.domain.ClassGroup;
 import com.rvapp.courseapi.domain.enums.ClassLevel;
+import com.rvapp.courseapi.exceptions.DuplicateObjectException;
 import com.rvapp.courseapi.exceptions.ObjectNotFoundException;
 import com.rvapp.courseapi.repositories.ClassGroupRepository;
 
@@ -24,23 +26,31 @@ public class ClassGroupService {
 	
 	public ClassGroup findById(String id) {
 		Optional<ClassGroup> classGroup = repository.findById(id);
-		return classGroup.orElseThrow(() -> new ObjectNotFoundException("Requested id not found."));
+		return classGroup.orElseThrow(() -> new ObjectNotFoundException(id));
 	}
 	
 	public List<ClassGroup> findByLevel(String text) {
 		try { 
 			return repository.findByClassLevel(ClassLevel.valueOf(text));
-		} catch (EnumConstantNotPresentException e) {
-			throw new ObjectNotFoundException(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw new ObjectNotFoundException(text);
 		}
 	}
 	
 	public void deleteById(String id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ObjectNotFoundException(id);
+		}
 	}
 	
 	public void post(ClassGroup classGroup) {
-		repository.insert(classGroup);
+		try {
+			repository.insert(classGroup);
+		} catch (RuntimeException e) {  // accuses MongoWriteException but won't catch it
+			throw new DuplicateObjectException(classGroup.getId());
+		}
 	}
 	
 	public void update(ClassGroup source, ClassGroup target) {

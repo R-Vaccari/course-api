@@ -1,12 +1,11 @@
 package com.rvapp.courseapi.resources.exceptions;
 
 import java.io.Serializable;
-import java.time.Instant;
 
 public class StandartError implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private Instant timeStamp;
+	private String timeStamp;
 	private Integer status;
 	private String error;
 	private String message;
@@ -16,7 +15,7 @@ public class StandartError implements Serializable {
 		
 	}
 
-	public StandartError(Instant timeStamp, Integer status, String error, String message, String path) {
+	public StandartError(String timeStamp, Integer status, String error, String message, String path) {
 		super();
 		this.timeStamp = timeStamp;
 		this.status = status;
@@ -25,11 +24,11 @@ public class StandartError implements Serializable {
 		this.path = path;
 	}
 
-	public Instant getTimeStamp() {
+	public String getTimeStamp() {
 		return timeStamp;
 	}
 
-	public void setTimeStamp(Instant timeStamp) {
+	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 
