@@ -51,8 +51,6 @@ public class TeacherService {
 			target.setLastName(source.getLastName());
 		} if (source.getEmail() != null) {
 			target.setEmail(source.getEmail());
-		} if (source.getPassword() != null) {
-			target.setPassword(source.getPassword());
 		} if (source.getTelephone() != null) {
 			target.setTelephone(source.getTelephone());
 		} repository.save(target);

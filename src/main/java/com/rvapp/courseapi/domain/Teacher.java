@@ -12,7 +12,6 @@ public class Teacher implements Serializable {
 	@Id private String id;
 	private String firstName;
 	private String lastName;
-	private String password;
 	private String email;
 	private String telephone;
 
@@ -21,12 +20,11 @@ public class Teacher implements Serializable {
 		
 	}
 
-	public Teacher(String id, String firstName, String lastName, String password, String email, String telephone) {
+	public Teacher(String id, String firstName, String lastName, String email, String telephone) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.password = password;
 		this.email = email;
 		this.telephone = telephone;
 	}
@@ -53,14 +51,6 @@ public class Teacher implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getEmail() {
