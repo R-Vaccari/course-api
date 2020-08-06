@@ -8,6 +8,15 @@ has a Teacher and a set of Students associated with it. Classes are also divided
 The API may be accessed here: 
 https://rvapp-course-api.herokuapp.com/swagger-ui.html
 
+Firstly, use the **POST** method in the Authenticate-resource in order to generate a JWT token. Use this request body:
+
+{"password": "password",
+ "username": "user"}
+ 
+Then, copy the token generated in the response body. Click on the **Authorize** button and add:
+"Bearer " + token. It will look like this: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNTk2NzYyOTQ2LCJpYXQiOjE1OTY3MjY5NDZ9.EUlSOvE1IiuIubuLbK35TgfWndAoKzPaq3_0w2-5hTU"
+ 
+You are now authorized to use all other methods.
 Each Object has a resource associated with it. Click on one of them in order to see their possible operations.
 
 **GET** endpoints will search the database for the respective resource's object. All Objects may be listed with the first **GET**. Then, they may be found by their id, which is listed with the previous method.
