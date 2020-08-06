@@ -16,8 +16,10 @@ import com.rvapp.courseapi.security.MyUserDetailsService;
 import com.rvapp.courseapi.security.models.AuthenticationRequest;
 import com.rvapp.courseapi.security.models.AuthenticationResponse;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
-class WelcomeResource {
+class AuthenticateResource {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -28,11 +30,7 @@ class WelcomeResource {
 	@Autowired
 	private MyUserDetailsService userDetailsService;
 
-	@RequestMapping(value = "/welcome")
-	public String firstPage() {
-		return "Welcome.";
-	}
-
+	@ApiOperation(value = "Generate a JWT token used for authentication. Username = 'user', Password = 'password'")
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 

@@ -1,6 +1,7 @@
 package com.rvapp.courseapi;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,21 +9,26 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import com.google.common.collect.Lists;
+
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.BasicAuth;
 import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurationSupport {
+	
+	public static final String AUTHORIZATION_HEADER = "Authorization";
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -40,29 +46,40 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         .select()
         .apis(RequestHandlerSelectors.basePackage("com.rvapp.courseapi."))
         .build()
-        .apiInfo(metaData()).securityContexts(Arrays.asList(securityContext()))
-        .securitySchemes(Arrays.asList(basicAuthScheme()));
+        .apiInfo(metaData()).securitySchemes(Lists.newArrayList(apiKey()))
+        .securityContexts(Arrays.asList(securityContext()));
 
   }
   
+  @Bean
+  public SecurityConfiguration security() {
+  return SecurityConfigurationBuilder.builder().scopeSeparator(",")
+      .additionalQueryStringParams(null)
+      .useBasicAuthenticationWithAccessCodeGrant(false).build();
+  }
+  
+  private ApiKey apiKey() {
+	    return new ApiKey("apiKey", "Authorization", "header");
+	    }
+
+	    
   private SecurityContext securityContext() {
-      return SecurityContext.builder()
-              .securityReferences(Arrays.asList(basicAuthReference()))
-              .build();
-  }
+	    return SecurityContext.builder().securityReferences(defaultAuth()).build();
+	    }
 
-  private SecurityScheme basicAuthScheme() {
-      return new BasicAuth("basicAuth");
-  }
-
-  private SecurityReference basicAuthReference() {
-      return new SecurityReference("basicAuth", new AuthorizationScope[0]);
-  }
+  private List<SecurityReference> defaultAuth() {
+	    AuthorizationScope authorizationScope = new AuthorizationScope(
+	        "global", "accessEverything");
+	    AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+	    authorizationScopes[0] = authorizationScope;
+	    return Arrays.asList(new SecurityReference("apiKey",
+	        authorizationScopes));
+	    }
 
   private ApiInfo metaData() {
     return new ApiInfoBuilder()
-        .title("Spring Boot REST API")
-        .description("\"Spring Boot REST API\"")
+        .title("Language Courses API")
+        .description("\"Spring Boot REST API designed to handle courses with multiple classes, each with students and a teacher.\"")
         .version("1.0.0")
         .license("Apache License Version 2.0")
         .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
