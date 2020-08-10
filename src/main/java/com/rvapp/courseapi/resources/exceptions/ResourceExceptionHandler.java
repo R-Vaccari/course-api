@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.rvapp.courseapi.exceptions.DuplicateObjectException;
 import com.rvapp.courseapi.exceptions.ObjectNotFoundException;
@@ -37,6 +40,14 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(status).body(se);
 	}
 	
-	
-	
+	@ExceptionHandler
+	@ResponseBody
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ResponseEntity<StandartError> unauthorized(HttpClientErrorException e,
+			HttpServletRequest request) {
+		String error = "Object already exists. Change id for posting or use PUT.";
+		HttpStatus status = HttpStatus.UNAUTHORIZED;
+		StandartError se = new StandartError(sdf.format(new Date()), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(se);
+	}
 }
