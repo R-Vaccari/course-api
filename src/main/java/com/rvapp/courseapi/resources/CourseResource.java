@@ -47,7 +47,7 @@ public class CourseResource {
 	
 	@ApiOperation(value = "Finds a course by it's type")
 	@GetMapping(value = "/typesearch")
-	public ResponseEntity<List<Course>> findByLevel(@RequestParam(value="type") String text) {
+	public ResponseEntity<List<Course>> findByType(@RequestParam(value="type") String text) {
 		text = URL.decodeParam(text);
 		List<Course> courses = service.findByType(text);
 		return ResponseEntity.ok().body(courses);

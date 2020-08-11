@@ -42,13 +42,13 @@ public class TestConfig implements CommandLineRunner {
 		teacherRepository.saveAll(Arrays.asList(teacher01, teacher02));
 		
 		Student student01 = new Student(null, "Student", "01","student01@gmail.com", "+777777");
-		Student student02 = new Student(null, "Student", "02", "student02@gmail.com", "+777777");
-		Student student03 = new Student(null, "Student", "03", "student03@gmail.com", "+777777");
-		Student student04 = new Student(null, "Student", "04", "student04@gmail.com", "+777777");
-		Student student05 = new Student(null, "Student", "05", "student05@gmail.com", "+777777");
-		Student student06 = new Student(null, "Student", "06", "student06@gmail.com", "+777777");
-		Student student07 = new Student(null, "Student", "07", "student07@gmail.com", "+777777");
-		Student student08 = new Student(null, "Student", "08", "student08@gmail.com", "+777777");
+		Student student02 = new Student(null, "Student", "02","student02@gmail.com", "+777777");
+		Student student03 = new Student(null, "Student", "03","student03@gmail.com", "+777777");
+		Student student04 = new Student(null, "Student", "04","student04@gmail.com", "+777777");
+		Student student05 = new Student(null, "Student", "05","student05@gmail.com", "+777777");
+		Student student06 = new Student(null, "Student", "06","student06@gmail.com", "+777777");
+		Student student07 = new Student(null, "Student", "07","student07@gmail.com", "+777777");
+		Student student08 = new Student(null, "Student", "08","student08@gmail.com", "+777777");
 		
 		studentRepository.saveAll(Arrays.asList(student01, student02, student03, student04, student05, student06, student07, student08));
 		
