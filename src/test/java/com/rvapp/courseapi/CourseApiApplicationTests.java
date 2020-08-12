@@ -1,10 +1,9 @@
 package com.rvapp.courseapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +17,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -98,9 +98,15 @@ class CourseApiApplicationTests {
 	
 
 	@Test
-	void exception() {
+	void falseIdTest() throws Exception {
+		
+		ResponseEntity<Student> response01 = studentResource.findById("test");
+		
+		when(studentResource.findById("test")).thenThrow(ObjectNotFoundException.class);
+		
+		// mockMvc.perform(MockMvcRequestBuilders.get("/testpage")).andReturn().getResponse();
 		
 		ObjectNotFoundException exception = assertThrows(ObjectNotFoundException.class, 
-				() -> courseResource.findByType("Test")); 
+				() -> studentResource.findById("test")); 
 	}
 }
