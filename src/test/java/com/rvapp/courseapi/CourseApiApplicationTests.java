@@ -1,9 +1,11 @@
 package com.rvapp.courseapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +19,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -54,7 +55,7 @@ class CourseApiApplicationTests {
 		Student student = new Student(null, "Student", "01","student01@gmail.com", "+777777");
 		ResponseEntity<Student> response = studentResource.post(student);
 		
-		assertEquals(response.getStatusCodeValue(), 201);
+		assertEquals(201, response.getStatusCodeValue());
 	}
 	
 	@Test
@@ -71,8 +72,8 @@ class CourseApiApplicationTests {
 		verify(studentService).deleteById(student01.getId());
 		
 		assertAll(
-		() -> assertEquals(response01.getStatusCodeValue(), 201),
-		() -> assertEquals(response02.getStatusCodeValue(), 204));
+		() -> assertEquals(201, response01.getStatusCodeValue()),
+		() -> assertEquals(204, response02.getStatusCodeValue()));
 	}
 	
 	@Test
@@ -89,8 +90,8 @@ class CourseApiApplicationTests {
 		ResponseEntity<Student> response02 = studentResource.update(student01.getId(), student02);
 
 		assertAll(
-		() -> assertEquals(response01.getStatusCodeValue(), 201),
-		() -> assertEquals(response02.getStatusCodeValue(), 204),
+		() -> assertEquals(201, response01.getStatusCodeValue()),
+		() -> assertEquals(204, response02.getStatusCodeValue()),
 		() -> assertThat(student01.getLastName().equals(student02.getLastName())),
 		() -> assertThat(student01.getEmail().equals(student02.getEmail())),
 		() -> assertThat(student01.getTelephone().equals(student02.getTelephone())));	
@@ -98,13 +99,12 @@ class CourseApiApplicationTests {
 	
 
 	@Test
+	@DisplayName("Test to find a non-existent object by Id")
 	void falseIdTest() throws Exception {
 		
 		ResponseEntity<Student> response01 = studentResource.findById("test");
 		
 		when(studentResource.findById("test")).thenThrow(ObjectNotFoundException.class);
-		
-		// mockMvc.perform(MockMvcRequestBuilders.get("/testpage")).andReturn().getResponse();
 		
 		ObjectNotFoundException exception = assertThrows(ObjectNotFoundException.class, 
 				() -> studentResource.findById("test")); 
