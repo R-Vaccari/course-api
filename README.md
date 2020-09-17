@@ -1,33 +1,66 @@
 # Language Courses API
-RESTful API made in Spring Boot.
-This API executes Post, Put, Get and Delete operations on a Mongo database.
-Objects are Students, Teachers, Courses and Classes. A Course is represented by a language, and may contain various Classes. Each Class
-has a Teacher and a set of Students associated with it. Classes are also divided by their level, such as Business or Beginner.
+RESTful API made in Spring Boot. Industry-standart API that executes CRUD operations on a MongoDB database.
 
-## How to use
 The API may be accessed here: 
 https://rvapp-course-api.herokuapp.com/swagger-ui.html
 
+## How It Works
+This API works in the context of a language courses app. It consists of 4 layers - Resources, Services, Domain and Repository - and a Model of 4 objects
+
+Layers | Classes | Function
+------------ | ------------- | -------------
+Resources | AuthenticateResource & respective object Resources | Provide HTTP endpoints for CRUD operations, such as GET and POST.
+Services | Object Services | Services connect Resources layer with the app data. Services access the Repositories in order to retrieve requested data or modify stored data according to the request, such as deleting or updating.
+Domain | Course, ClassGroup, Teacher, Student | Objects that define the language courses context.
+Repository | Object Repositories | This layer communicates with the database. Each object has a respective repository in order to separate their implementations. 
+
+## How to use
+
+### Authentication
 Firstly, use the **POST** method in the Authenticate-resource in order to generate a JWT token. Use this request body:
 
 {"password": "password",
  "username": "user"}
  
 Then, copy the token generated in the response body. Click on the **Authorize** button and add:
-"Bearer " + token. It will look like this: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNTk2NzYyOTQ2LCJpYXQiOjE1OTY3MjY5NDZ9.EUlSOvE1IiuIubuLbK35TgfWndAoKzPaq3_0w2-5hTU"
+"Bearer " + token. It will look like this: "Bearer ey [...] 5hTU"
  
 You are now authorized to use all other methods.
 Each Object has a resource associated with it. Click on one of them in order to see their possible operations.
 
-**GET** endpoints will search the database for the respective resource's object. All Objects may be listed with the first **GET**. Then, they may be found by their id, which is listed with the previous method.
+### Endpoints
 
-Classes may be also found by their ClassLevel. Possible entries are these (must match exactly): **BEGINNER**, **INTERMEDIATE**, **ADVANCED**, **BUSINESS**.
+/authenticate/
 
-Courses may be also found by their CourseType. Possible entries are these (must match exactly): **ENGLISH**, **PORTUGUESE**, **GERMAN**, **ITALIAN**.
 
-**POST** endpoints will register a new Object entry. Simply fill the attributes as you wish.
 
-**PUT** endpoints will update a registered Object. In order to update, fill the **Id** field with the id of the Object you wish to update. Below that, fill in the attributes you wish to update. Attributes may be deleted in this field, meaning they will not be changed.
-The method will *only* change the fields executed in this operation.
+/courses/
 
-**DELETE** will delete an Object entry. Simply put the Object's id in the **Id** field and execute.
+/courses/{id}
+
+/courses/typesearch?="TYPE"  -- Possible entries are these (must match exactly): **ENGLISH**, **PORTUGUESE**, **GERMAN**, **ITALIAN**.
+
+
+
+/classes/
+
+/classes/{id}
+
+/classes/levelsearch?="LEVEL" -- Possible entries are these (must match exactly): **BEGINNER**, **INTERMEDIATE**, **ADVANCED**, **BUSINESS**.
+
+
+/teachers/
+
+/teachers/{id}
+
+
+
+/students/
+
+/students/{id}
+
+
+Contact Me | Links
+------------ | -------------
+E-mail | rodrigo.v.melo@hotmail.com
+LinkedIn | https://www.linkedin.com/in/rodrigo-vaccari-3128b7167
